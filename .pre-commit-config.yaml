@@ -1,0 +1,25 @@
+repos:
+  - repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: 'v2.0.2'  # Especifica una versión/etiqueta/confirmación específica o déjalo vacío para la última versión
+    hooks:
+      - id: autopep8
+        exclude: '^$'  # Especifica archivos o patrones a excluir, '^$' excluye nada (todos los archivos se verificarán)
+        args: [--verbose]
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        args: [--ignore=E501]
+
+  - repo: https://github.com/pycqa/isort
+    rev: ''  # Especifica una versión/etiqueta/confirmación específica o déjalo vacío para la última versión
+    hooks:
+      - id: isort
+        args: [--apply]
+
+  - repo: https://github.com/myint/autoflake
+    rev: ''  # Especifica una versión/etiqueta/confirmación específica o déjalo vacío para la última versión
+    hooks:
+      - id: autoflake
+        args: [--remove-all-unused-imports, --remove-duplicate-keys, --expand-star-imports]
