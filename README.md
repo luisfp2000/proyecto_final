@@ -71,30 +71,55 @@ Certainly, here are some other machine learning models that could be used for pr
 * The average salary for Data Science Jobs in USD is 112,297.87.
 
 
-Follow the instructions below to the notebook.
-### Run the existing notebook
+## Follow the instructions below to the notebook.
 
-1. Create a virtual environment with `Python 3.10.9`
-    * Create venv
-        ```
-        python3 -m venv venv
-        ```
+Run the existing notebook
 
-    * Activate the virtual environment
+1. Create a virtual Enviroment 
 
-        ```
-        source venv/bin/activate
-        ```
+Install Python 3.10.9:
+Download the latest version of Python 3.10.9 from the official Python website (https://www.python.org/downloads/). Make sure to check the "Add Python to PATH" option during installation.
+
+Open Command Prompt:
+Press Win + R, type "cmd," and press Enter to open the Windows Command Prompt.
+
+Install virtualenv (optional but recommended):
+You can install the virtualenv tool to create virtual environments more conveniently. In the command prompt, execute the following command to install virtualenv:
+
+pip install virtualenv
+
+Create a Directory for Your Project:
+In the command prompt, navigate to the location where you want to create your project. You can use the cd command to change directories.
+
+Create the Virtual Environment:
+To create a virtual environment named "myenv," execute the following command:
+
+python -m venv myenv
+
+This will create a "myenv" directory containing the virtual environment.
+
+Activate the Virtual Environment:
+To activate the virtual environment, navigate to the "myenv" folder you just created in the command prompt and then run:
+
+myenv\Scripts\activate
+
+You'll notice that the command prompt changes, indicating that you're inside the virtual environment.
+
+Install Packages:
+With the virtual environment activated, you can install packages using pip just like you would outside the virtual environment.
+
+Deactivate the Virtual Environment:
+To deactivate the virtual environment and return to the global Python system, simply run:
+
+deactivate
 
 2. Install libraries
-    Run the following command to install the necesary libraries for the project.
 
-    ```bash
-    pip install -r /requirements.txt
-    ```
-    Verify the installation with this command:
-    ```bash
-    pip freeze
-    ```
-    
-    
+Run the following command to install the necesary libraries for the project.
+
+pip install -r /requirements.txt
+
+Verify the installation with this command:
+
+pip freeze
+   
