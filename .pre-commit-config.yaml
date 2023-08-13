@@ -1,25 +1,41 @@
 repos:
-  - repo: https://github.com/pre-commit/mirrors-autopep8
-    rev: 'v2.0.2'  # Especifica una versión/etiqueta/confirmación específica o déjalo vacío para la última versión
-    hooks:
+- repo: https://github.com/pre-commit/mirrors-autopep8
+  rev: ''
+  hooks:
       - id: autopep8
-        exclude: '^$'  # Especifica archivos o patrones a excluir, '^$' excluye nada (todos los archivos se verificarán)
-        args: [--verbose]
+        exclude: '^$'  # Specify files or patterns to exclude, '^$' excludes nothing (all files will be checked)
 
-  - repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
-    hooks:
-      - id: flake8
-        args: [--ignore=E501]
+- repo: https://github.com/PyCQA/flake8
+  rev: 6.0.0
+  hooks:
+  - id: flake8
+    args: [--ignore=E501]
 
-  - repo: https://github.com/pycqa/isort
-    rev: ''  # Especifica una versión/etiqueta/confirmación específica o déjalo vacío para la última versión
-    hooks:
-      - id: isort
-        args: [--apply]
+- repo: https://github.com/PyCQA/autoflake
+  rev: v2.2.0
+  hooks:
+    - id: autoflake    
 
-  - repo: https://github.com/myint/autoflake
-    rev: ''  # Especifica una versión/etiqueta/confirmación específica o déjalo vacío para la última versión
-    hooks:
-      - id: autoflake
-        args: [--remove-all-unused-imports, --remove-duplicate-keys, --expand-star-imports]
+# Ruff version.
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.0.280
+  hooks:
+    - id: ruff
+      name: ruff
+      args: [--fix]
+      language: system
+      types_or: [ python, pyi ]
+      
+# Black
+- repo: https://github.com/psf/black
+  rev: 23.1.0
+  hooks:
+    - id: black
+
+- repo: https://github.com/pycqa/isort
+  rev: 5.12.0
+  hooks:
+    - id: isort
+      name: isort (python)
+      args: ["--profile", "black", "--filter-files"]
+   
