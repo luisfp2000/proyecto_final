@@ -73,18 +73,18 @@ if __name__ == "__main__":
                                                    )
     
     
-    logistic_regression_model = salary_data_pipeline.fit_logistic_regression(X_train, y_train)
+    linear_regression_model = salary_data_pipeline.fit_linear_regression(X_train, y_train)
     
     X_test = salary_data_pipeline.PIPELINE.fit_transform(X_test)
-    y_pred = logistic_regression_model.predict(X_test)
+    y_pred = linear_regression_model.predict(X_test)
     
-    class_pred = logistic_regression_model.predict(X_test)
-    proba_pred = logistic_regression_model.predict_proba(X_test)[:,1]
+    class_pred = linear_regression_model.predict(X_test)
+    proba_pred = linear_regression_model.predict_proba(X_test)[:,1]
     print(f'test roc-auc : {roc_auc_score(y_test, proba_pred)}')
     print(f'test accuracy: {accuracy_score(y_test, class_pred)}')
     
     # # Save the model using joblib
     save_path = TRAINED_MODEL_DIR + PIPELINE_SAVE_FILE
-    joblib.dump(logistic_regression_model, save_path)
+    joblib.dump(linear_regression_model, save_path)
     print(f"Model saved in {save_path}")
     

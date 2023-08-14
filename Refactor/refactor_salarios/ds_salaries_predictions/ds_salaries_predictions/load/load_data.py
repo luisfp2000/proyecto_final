@@ -95,7 +95,7 @@ class DataRetriever:
 
         # Extract the first cabin | Extract the title from 'name'
 
-        data['employment_type'] = data['employment_type'].apply(self.get_employment_type_desc)
+        data['employment_type'] = data['employment_type'].apply(self._get_employment_type_desc)
         data['experience_level'] = data['experience_level'].apply(self._get_level)
 
         # Drop irrelevant columns
