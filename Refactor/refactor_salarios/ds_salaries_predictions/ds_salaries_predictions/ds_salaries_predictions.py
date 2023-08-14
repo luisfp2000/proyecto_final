@@ -1,7 +1,7 @@
 """Main module."""
 
 from load.load_data import DataRetriever
-from train.train_data import TitanicDataPipeline
+from train.train_data import SalaryDataPipeline
 import pandas as pd
 from sklearn.model_selection import train_test_split
 import joblib
@@ -13,7 +13,7 @@ URL = 'https://raw.githubusercontent.com/luisfp2000/proyecto_final/main/Baseline
 
 
 
-DROP_COLS = ['work_year','employee_residence','remote_ratio']
+DROP_COLS = ['work_year','salary','salary_currency']
 RETRIEVED_DATA = 'ds_salaries.csv'
 
 
@@ -23,8 +23,8 @@ TEST_DATA_FILE  = DATASETS_DIR + 'test.csv'
 
 TARGET = 'salary_in_usd'
 FEATURES = []
-NUMERICAL_VARS = ['salary_in_usd']
-CATEGORICAL_VARS = ['experience_level','employment_type','job_title' ,'company_location','company_size']
+NUMERICAL_VARS = ['remote_ratio','salary_in_usd']
+CATEGORICAL_VARS = ['experience_level','employment_type','job_title' ,'employee_residence','company_location','company_size']
 
 
 NUMERICAL_VARS_WITH_NA = []
@@ -53,8 +53,8 @@ if __name__ == "__main__":
     result = data_retriever.retrieve_data()
     print(result)
     
-    # Instantiate the TitanicDataPipeline class
-    titanic_data_pipeline = TitanicDataPipeline(seed_model=SEED_MODEL,
+    # Instantiate the SalaryDataPipeline class
+    salary_data_pipeline = SalaryDataPipeline(seed_model=SEED_MODEL,
                                                 numerical_vars=NUMERICAL_VARS, 
                                                 categorical_vars_with_na=CATEGORICAL_VARS_WITH_NA,
                                                 numerical_vars_with_na=NUMERICAL_VARS_WITH_NA,
@@ -73,9 +73,9 @@ if __name__ == "__main__":
                                                    )
     
     
-    logistic_regression_model = titanic_data_pipeline.fit_logistic_regression(X_train, y_train)
+    logistic_regression_model = salary_data_pipeline.fit_logistic_regression(X_train, y_train)
     
-    X_test = titanic_data_pipeline.PIPELINE.fit_transform(X_test)
+    X_test = salary_data_pipeline.PIPELINE.fit_transform(X_test)
     y_pred = logistic_regression_model.predict(X_test)
     
     class_pred = logistic_regression_model.predict(X_test)

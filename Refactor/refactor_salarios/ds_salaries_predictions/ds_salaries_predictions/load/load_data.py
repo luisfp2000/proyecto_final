@@ -22,7 +22,7 @@ class DataRetriever:
     ```
     """
 
-    DROP_COLS = []
+    DROP_COLS = ['work_year','salary','salary_currency']
     DATASETS_DIR = './data/'  # Directory where data will be saved.
     RETRIEVED_DATA = 'ds_salaries.csv'  # File name for the retrieved data.
 
@@ -30,42 +30,50 @@ class DataRetriever:
         self.url = url
         self.DATASETS_DIR = data_path
 
-    def _get_first_cabin(self, row):
+    def _get_employment_type_desc(self, employee):
         """
-        Helper function to extract the first cabin from a row.
+        Helper function to extract the employment type description
 
         Parameters:
-            row (str): The row containing cabin information.
+            employee (str): The type of employment for the role.
 
         Returns:
-            str: The first cabin from the row, or np.nan if not found.
+            str: The employment type description extracted from the employment type.
         """
-        try:
-            return row.split()[0]
-        except Exception:
-            return np.nan
+        line = employee
+        if re.search('PT', line):
+            return 'Part_time'
+        elif re.search('FT', line):
+            return 'Full_time'
+        elif re.search('CT', line):
+            return 'Contract'
+        elif re.search('FL', line):
+            return 'Freelance'
+        else:
+            return 'Other'
 
-    def _get_title(self, passenger):
+    def _get_level(self, employee):
         """
-        Helper function to extract the title from a passenger's name.
+        Helper function to extract the level from a employee's experence
 
         Parameters:
-            passenger (str): The name of the passenger.
+            employee (str): The level description of the employee.
 
         Returns:
-            str: The title extracted from the passenger's name.
+            str: The level description extracted from the level's experence.
         """
-        #line = passenger
-        #if re.search('Mrs', line):
-         #   return 'Mrs'
-        #elif re.search('Mr', line):
-        #    return 'Mr'
-        #elif re.search('Miss', line):
-        #    return 'Miss'
-        #elif re.search('Master', line):
-        #    return 'Master'
-        #else:
-        #    return 'Other'
+        line = employee
+        if re.search('EN', line):
+            return 'Junior'
+        elif re.search('MI', line):
+            return 'Intermediate'
+        elif re.search('SE', line):
+            return 'Expert'
+        elif re.search('EX', line):
+            return 'Director'
+        else:
+            return 'Other'
+
 
     def retrieve_data(self):
         """
@@ -78,16 +86,20 @@ class DataRetriever:
         data = pd.read_csv(self.url)
 
         # Uncovering missing data
-        #data.replace('?', np.nan, inplace=True)
-        #data['age'] = data['age'].astype('float')
-        #data['fare'] = data['fare'].astype('float')
+        data.replace('?', np.nan, inplace=True)
+        data['salary'] = data['salary'].astype('float')
+        data['salary_in_usd'] = data['salary_in_usd'].astype('float')
+        data['remote_ratio'] = data['remote_ratio'].astype('float')
+        data['work_year'] = data['work_year'].astype('float')
+        
 
         # Extract the first cabin | Extract the title from 'name'
-        #data['cabin'] = data['cabin'].apply(self._get_first_cabin)
-        #data['title'] = data['name'].apply(self._get_title)
+
+        data['employment_type'] = data['employment_type'].apply(self.get_employment_type_desc)
+        data['experience_level'] = data['experience_level'].apply(self._get_level)
 
         # Drop irrelevant columns
-        #data.drop(self.DROP_COLS, axis=1, inplace=True)
+        data.drop(self.DROP_COLS, axis=1, inplace=True)
 
         # Create directory if it does not exist
         if not os.path.exists(self.DATASETS_DIR):
@@ -100,9 +112,4 @@ class DataRetriever:
         data.to_csv(self.DATASETS_DIR + self.RETRIEVED_DATA, index=False)
 
         return f'Data stored in {self.DATASETS_DIR + self.RETRIEVED_DATA}'
-
-# Usage Example:
-# URL = 'https://www.openml.org/data/get_csv/16826755/phpMYEkMl'
-# data_retriever = DataRetriever(URL)
-# result = data_retriever.retrieve_data()
-# print(result)
+    
