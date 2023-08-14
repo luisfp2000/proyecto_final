@@ -9,7 +9,7 @@ import os
 from sklearn.metrics import accuracy_score, roc_auc_score
 
 DATASETS_DIR = './data/'
-URL = 'https://www.openml.org/data/get_csv/16826755/phpMYEkMl'
+URL = 'https://raw.githubusercontent.com/luisfp2000/proyecto_final/main/Baseline/Dataset/ds_salaries.csv'
 
 
 

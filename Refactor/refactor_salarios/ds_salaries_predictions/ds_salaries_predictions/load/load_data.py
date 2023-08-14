@@ -15,7 +15,7 @@ class DataRetriever:
 
     Example usage:
     ```
-    URL = 'https://www.openml.org/data/get_csv/16826755/phpMYEkMl'
+    URL = 'https://raw.githubusercontent.com/luisfp2000/proyecto_final/main/Baseline/Dataset/ds_salaries.csv'
     data_retriever = DataRetriever(URL)
     result = data_retriever.retrieve_data()
     print(result)
@@ -24,7 +24,7 @@ class DataRetriever:
 
     DROP_COLS = []
     DATASETS_DIR = './data/'  # Directory where data will be saved.
-    RETRIEVED_DATA = 'ds_salaries1.csv'  # File name for the retrieved data.
+    RETRIEVED_DATA = 'ds_salaries.csv'  # File name for the retrieved data.
 
     def __init__(self, url, data_path):
         self.url = url
