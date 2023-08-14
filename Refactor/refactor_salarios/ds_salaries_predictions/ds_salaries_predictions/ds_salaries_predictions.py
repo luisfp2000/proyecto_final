@@ -23,7 +23,7 @@ TEST_DATA_FILE  = DATASETS_DIR + 'test.csv'
 
 TARGET = 'salary_in_usd'
 FEATURES = []
-NUMERICAL_VARS = ['remote_ratio','salary_in_usd']
+NUMERICAL_VARS = ['remote_ratio']
 CATEGORICAL_VARS = ['experience_level','employment_type','job_title' ,'employee_residence','company_location','company_size']
 
 
@@ -56,10 +56,7 @@ if __name__ == "__main__":
     # Instantiate the SalaryDataPipeline class
     salary_data_pipeline = SalaryDataPipeline(seed_model=SEED_MODEL,
                                                 numerical_vars=NUMERICAL_VARS, 
-                                                categorical_vars_with_na=CATEGORICAL_VARS_WITH_NA,
-                                                numerical_vars_with_na=NUMERICAL_VARS_WITH_NA,
-                                                categorical_vars=CATEGORICAL_VARS,
-                                                selected_features=SELECTED_FEATURES)
+                                                categorical_vars=CATEGORICAL_VARS)
     
     # Read data
     df = pd.read_csv(DATASETS_DIR + RETRIEVED_DATA)
@@ -69,22 +66,10 @@ if __name__ == "__main__":
                                                         df.drop(TARGET, axis=1),
                                                         df[TARGET],
                                                         test_size=0.2,
-                                                        random_state=404
                                                    )
     
     
     linear_regression_model = salary_data_pipeline.fit_linear_regression(X_train, y_train)
     
-    X_test = salary_data_pipeline.PIPELINE.fit_transform(X_test)
-    y_pred = linear_regression_model.predict(X_test)
-    
-    class_pred = linear_regression_model.predict(X_test)
-    proba_pred = linear_regression_model.predict_proba(X_test)[:,1]
-    print(f'test roc-auc : {roc_auc_score(y_test, proba_pred)}')
-    print(f'test accuracy: {accuracy_score(y_test, class_pred)}')
-    
-    # # Save the model using joblib
-    save_path = TRAINED_MODEL_DIR + PIPELINE_SAVE_FILE
-    joblib.dump(linear_regression_model, save_path)
-    print(f"Model saved in {save_path}")
+
     
