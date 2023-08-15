@@ -2,20 +2,11 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.linear_model import LinearRegression
 from sklearn.compose import ColumnTransformer
-from preprocess.preprocess_data import (
-    MissingIndicator,
-    ExtractLetters,
-    CategoricalImputer,
-    NumericalImputer,
-    RareLabelCategoricalEncoder,
-    OneHotEncoder,
-    FeatureSelector,
-    OrderingFeatures
-)
+from preprocess.preprocess_data import *
 
 class SalaryDataPipeline:
     """
-    A class representing the Titanic data processing and modeling pipeline.
+    A class representing the DS Salary  data processing and modeling pipeline.
 
     Attributes:
         NUMERICAL_VARS (list): A list of numerical variables in the dataset.
@@ -25,7 +16,7 @@ class SalaryDataPipeline:
         SEED_MODEL (int): A seed value for reproducibility.
 
     Methods:
-        create_pipeline(): Create and return the Titanic data processing pipeline.
+        create_pipeline(): Create and return the DS Salary data processing pipeline.
     """
     
     def __init__(self, seed_model, numerical_vars, categorical_vars_with_na,
@@ -48,14 +39,7 @@ class SalaryDataPipeline:
         """
         self.PIPELINE = Pipeline(
             [
-                                ('missing_indicator', MissingIndicator(variables=self.NUMERICAL_VARS)),
-                                ('cabin_only_letter', ExtractLetters()),
-                                ('categorical_imputer', CategoricalImputer(variables=self.CATEGORICAL_VARS_WITH_NA)),
-                                ('median_imputation', NumericalImputer(variables=self.NUMERICAL_VARS_WITH_NA)),
-                                ('rare_labels', RareLabelCategoricalEncoder(tol=0.05, variables=self.CATEGORICAL_VARS)),
                                 ('dummy_vars', OneHotEncoder(variables=self.CATEGORICAL_VARS)),
-                                ('feature_selector', FeatureSelector(self.SELECTED_FEATURES)),
-                                ('aligning_feats', OrderingFeatures()),
                                 ('scaling', MinMaxScaler()),
                               ]
         )
@@ -75,18 +59,26 @@ class SalaryDataPipeline:
         linear_regression = LinearRegression()
         pipeline = self.create_pipeline()
         pipeline.fit(X_train, y_train)
-        linear_regression.fit(pipeline.transform(X_train), y_train)
+        print(X_train.shape)
+        X_transform = pipeline.transform(X_train)
+        print(X_transform.shape)
+        linear_regression.fit(X_transform, y_train)
         return linear_regression
     
-    def transform_test_data(self, X_test):
+    
+    def apply_pipeline_to_test_data(self, X_test):
         """
-        Apply the data preprocessing pipeline on the test data.
+        Applies the data processing pipeline to the test data.
 
         Parameters:
-        - X_test (pandas.DataFrame or numpy.ndarray): The test input data.
+            X_test (pd.DataFrame): Test input data.
 
         Returns:
-        - transformed_data (pandas.DataFrame or numpy.ndarray): The preprocessed test data.
+            X_test_transformed (pd.DataFrame): Transformed test data using the pipeline.
         """
         pipeline = self.create_pipeline()
-        return pipeline.transform(X_test)
+        print(X_test.shape)
+        pipeline.fit(X_test)
+        X_test_transformed = pipeline.transform(X_test)
+        print(X_test_transformed.shape)
+        return X_test_transformed
