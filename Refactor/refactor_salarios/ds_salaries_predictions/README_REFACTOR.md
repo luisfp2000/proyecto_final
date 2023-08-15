@@ -52,9 +52,9 @@ Check the **requirements_extended.txt** file for information on all the packages
 To create virtual environment and install requirements use the following lines
 
 ```
-py -3.10 -m venv venv-proy01
+py -3.10 -m venv refactor_salarios
 
-.\venv-proy01\Scripts\activate
+.\refactor_salarios\Scripts\activate
 
 pip install -r requirements.txt
 ```
