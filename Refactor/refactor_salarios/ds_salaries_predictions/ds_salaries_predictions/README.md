@@ -1,17 +1,3 @@
-# ITESM-MLOps-Project
-This repository contains the files related to first part of the final proyect 
-
-Student ID : A01688409
-
-Student Name : Luis Fernandez Pérez
-
-Teacher: Dr. Carlos Noé López Mejía
-
-This project uses the following dataset : 
-
-https://www.kaggle.com/datasets/arnabchaki/data-science-salaries-2023/
-
-
 # Data-Science-Job-Salaries Predective Model - Project Overview
 
 The "Data Science Salaries" dataset provides valuable insights into the compensation trends and variations in the field of data science from 2020 to 2023. This dataset encompasses a comprehensive collection of salary information from various industries, organizations, and geographic regions, enabling data professionals, researchers, and organizations to analyze and understand the prevailing salary landscape in the data science domain during this four-year period. By examining this dataset, one can gain a deeper understanding of the factors influencing data science salaries, such as job roles, experience levels, educational backgrounds, and geographical locations. The dataset serves as a valuable resource for individuals seeking career guidance, companies aiming to benchmark their compensation strategies, and researchers investigating the evolving dynamics of the data science job market.
