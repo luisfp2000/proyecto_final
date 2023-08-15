@@ -5,6 +5,7 @@ import re
 import numpy as np
 
 class MissingIndicator(BaseEstimator, TransformerMixin):
+
     """
     Custom scikit-learn transformer to create indicator features for missing values in specified variables.
 
@@ -83,6 +84,85 @@ class MissingIndicator(BaseEstimator, TransformerMixin):
 
         return X
     
+class OneHotEncoder(BaseEstimator, TransformerMixin):
+    """
+    Custom scikit-learn transformer to perform one-hot encoding for categorical variables.
+
+    Parameters:
+        variables (list or str, optional): List of column names (variables) to perform one-hot encoding for.
+            If a single string is provided, it will be treated as a single variable. Default is None.
+
+    Methods:
+        fit(X, y=None):
+            Calculates the one-hot encoded dummy variable columns for the specified categorical variables from the training data.
+            It returns the transformer instance itself.
+
+        transform(X):
+            Performs one-hot encoding for the specified categorical variables and returns the modified DataFrame.
+
+    Example usage:
+    ```
+    from sklearn.pipeline import Pipeline
+
+    # Instantiate the custom transformer
+    encoder = OneHotEncoder(variables=['category1', 'category2'])
+
+    # Define the pipeline with the custom transformer
+    pipeline = Pipeline([
+        ('encoder', encoder),
+        # Other pipeline steps...
+    ])
+
+    # Fit and transform the data using the pipeline
+    X_transformed = pipeline.fit_transform(X)
+    ```
+    """
+    def __init__(self, variables=None):
+        """
+        Initialize the OneHotEncoder transformer.
+
+        Parameters:
+            variables (list or str, optional): List of column names (variables) to perform one-hot encoding for.
+                If a single string is provided, it will be treated as a single variable. Default is None.
+        """
+        self.variables = [variables] if not isinstance(variables, list) else variables
+
+    def fit(self, X, y=None):
+        """
+        Calculates the one-hot encoded dummy variable columns for the specified categorical variables from the training data.
+
+        Parameters:
+            X (pd.DataFrame): Input data to be transformed.
+
+        Returns:
+            self (OneHotEncoder): The transformer instance.
+        """
+        return self
+
+    def transform(self, X):
+        """
+        Performs one-hot encoding for the specified categorical variables and returns the modified DataFrame.
+
+        Parameters:
+            X (pd.DataFrame): Input data to be transformed.
+
+        Returns:
+            X_transformed (pd.DataFrame): Transformed DataFrame with one-hot encoded dummy variables for the specified categorical variables.
+        """
+        X = X.copy()
+        X_encoded = pd.get_dummies(X[self.variables], drop_first=True)
+
+        # Adding missing dummies, if any
+        missing_dummies = [var for var in X_encoded.columns if var not in self.variables]
+        if len(missing_dummies) != 0:
+            for col in missing_dummies:
+                X_encoded[col] = 0
+
+        X = pd.concat([X, X_encoded], axis=1)
+        X.drop(self.variables, axis=1, inplace=True)
+
+        return X
+
 class ExtractLetters(BaseEstimator, TransformerMixin):
     """
     Custom scikit-learn transformer to extract letters from a specified variable.
@@ -394,88 +474,6 @@ class RareLabelCategoricalEncoder(BaseEstimator, TransformerMixin):
             X[var] = np.where(X[var].isin(self.rare_labels_dict[var]), 'rare', X[var])
         return X
       
-class OneHotEncoder(BaseEstimator, TransformerMixin):
-    """
-    Custom scikit-learn transformer to perform one-hot encoding for categorical variables.
-
-    Parameters:
-        variables (list or str, optional): List of column names (variables) to perform one-hot encoding for.
-            If a single string is provided, it will be treated as a single variable. Default is None.
-
-    Attributes:
-        variables (list): List of column names (variables) to perform one-hot encoding for.
-        dummies (list): List of column names representing the one-hot encoded dummy variables.
-
-    Methods:
-        fit(X, y=None):
-            Calculates the one-hot encoded dummy variable columns for the specified categorical variables from the training data.
-            It returns the transformer instance itself.
-
-        transform(X):
-            Performs one-hot encoding for the specified categorical variables and returns the modified DataFrame.
-
-    Example usage:
-    ```
-    from sklearn.pipeline import Pipeline
-
-    # Instantiate the custom transformer
-    encoder = OneHotEncoder(variables=['category1', 'category2'])
-
-    # Define the pipeline with the custom transformer
-    pipeline = Pipeline([
-        ('encoder', encoder),
-        # Other pipeline steps...
-    ])
-
-    # Fit and transform the data using the pipeline
-    X_transformed = pipeline.fit_transform(X)
-    ```
-    """
-    def __init__(self, variables=None):
-        """
-        Initialize the OneHotEncoder transformer.
-
-        Parameters:
-            variables (list or str, optional): List of column names (variables) to perform one-hot encoding for.
-                If a single string is provided, it will be treated as a single variable. Default is None.
-        """
-        self.variables = [variables] if not isinstance(variables, list) else variables
-
-    def fit(self, X, y=None):
-        """
-        Calculates the one-hot encoded dummy variable columns for the specified categorical variables from the training data.
-
-        Parameters:
-            X (pd.DataFrame): Input data to be transformed.
-
-        Returns:
-            self (OneHotEncoder): The transformer instance.
-        """
-        self.dummies = pd.get_dummies(X[self.variables], drop_first=True).columns
-        return self
-
-    def transform(self, X):
-        """
-        Performs one-hot encoding for the specified categorical variables and returns the modified DataFrame.
-
-        Parameters:
-            X (pd.DataFrame): Input data to be transformed.
-
-        Returns:
-            X_transformed (pd.DataFrame): Transformed DataFrame with one-hot encoded dummy variables for the specified categorical variables.
-        """
-        X = X.copy()
-        X = pd.concat([X, pd.get_dummies(X[self.variables], drop_first=True)], axis=1)
-        X.drop(self.variables, axis=1)
-
-        # Adding missing dummies, if any
-        missing_dummies = [var for var in self.dummies if var not in X.columns]
-        if len(missing_dummies) != 0:
-            for col in missing_dummies:
-                X[col] = 0
-
-        return X
-
 class FeatureSelector(BaseEstimator, TransformerMixin):
     """
     Custom scikit-learn transformer to select specific features (columns) from a DataFrame.
