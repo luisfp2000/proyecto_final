@@ -13,7 +13,7 @@ URL = 'https://raw.githubusercontent.com/luisfp2000/proyecto_final/main/Baseline
 
 
 
-DROP_COLS = ['work_year','salary','salary_currency']
+DROP_COLS = ['work_year','salary','salary_currency','remote_ratio']
 RETRIEVED_DATA = 'ds_salaries.csv'
 
 
@@ -23,7 +23,7 @@ TEST_DATA_FILE  = DATASETS_DIR + 'test.csv'
 
 TARGET = 'salary_in_usd'
 FEATURES = []
-NUMERICAL_VARS = ['remote_ratio']
+NUMERICAL_VARS = ['salary_in_usd']
 CATEGORICAL_VARS = ['experience_level','employment_type','job_title' ,'employee_residence','company_location','company_size']
 
 
@@ -54,9 +54,13 @@ if __name__ == "__main__":
     print(result)
     
     # Instantiate the SalaryDataPipeline class
-    salary_data_pipeline = SalaryDataPipeline(seed_model=SEED_MODEL,
+    salary_data_pipeline = SalaryDataPipeline (seed_model=SEED_MODEL,
                                                 numerical_vars=NUMERICAL_VARS, 
-                                                categorical_vars=CATEGORICAL_VARS)
+                                                categorical_vars_with_na=CATEGORICAL_VARS_WITH_NA,
+                                                numerical_vars_with_na=NUMERICAL_VARS_WITH_NA,
+                                                categorical_vars=CATEGORICAL_VARS,
+                                                selected_features=SELECTED_FEATURES)
+    
     
     # Read data
     df = pd.read_csv(DATASETS_DIR + RETRIEVED_DATA)
@@ -70,6 +74,20 @@ if __name__ == "__main__":
     
     
     linear_regression_model = salary_data_pipeline.fit_linear_regression(X_train, y_train)
+    
+
+    X_test = salary_data_pipeline.PIPELINE.fit_transform(X_test)
+    y_pred = linear_regression_model.predict(X_test)
+    
+    class_pred = linear_regression_model.predict(X_test)
+    proba_pred = linear_regression_model.predict_proba(X_test)[:,1]
+    print(f'test roc-auc : {roc_auc_score(y_test, proba_pred)}')
+    print(f'test accuracy: {accuracy_score(y_test, class_pred)}')
+    
+    # # Save the model using joblib
+    save_path = TRAINED_MODEL_DIR + PIPELINE_SAVE_FILE
+    joblib.dump(linear_regression_model, save_path)
+    print(f"Model saved in {save_path}")
     
 
     
