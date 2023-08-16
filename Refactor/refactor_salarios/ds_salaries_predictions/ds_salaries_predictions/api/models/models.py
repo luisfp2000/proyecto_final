@@ -10,7 +10,8 @@ class DSSalariesPrediction (BaseModel):
     job_title
     employee_residence
     company_location
-    company_size
+    company_size,
+    remote_ratio
     """
     experience_level: str
     employment_type:str
@@ -18,5 +19,6 @@ class DSSalariesPrediction (BaseModel):
     employee_residence:str
     company_location:str
     company_size:str
+    remote_ratio:float
 
     

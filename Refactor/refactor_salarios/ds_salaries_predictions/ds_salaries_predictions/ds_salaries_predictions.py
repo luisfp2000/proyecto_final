@@ -84,7 +84,7 @@ if __name__ == "__main__":
     y_true = y_train
   
     print(f'MAPE: {(1-mean_absolute_percentage_error(y_true, y_pred))*100}')
-
+    
 
     # # Save the model using joblib
     save_path = TRAINED_MODEL_DIR + PIPELINE_SAVE_FILE
