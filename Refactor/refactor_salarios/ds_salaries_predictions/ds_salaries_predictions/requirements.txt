@@ -60,3 +60,5 @@ traitlets==5.9.0
 tzdata==2023.3
 urllib3==2.0.4
 wcwidth==0.2.6
+uvicorn==0.23.2
+fastapi==0.101.1
