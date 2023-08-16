@@ -10,7 +10,7 @@ from .models.models import DSSalariesPrediction
 
 
 
-NUMERICAL_VARS = ['salary_in_usd']
+NUMERICAL_VARS = ['remote_ratio']
 CATEGORICAL_VARS = ['experience_level','employment_type','job_title' ,'employee_residence','company_location','company_size']
 NUMERICAL_VARS_WITH_NA = []
 SELECTED_FEATURES = []
