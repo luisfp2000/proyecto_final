@@ -23,7 +23,7 @@ Run the following command to install the libraries/packages.
 * Change to the [demo_fast_api](.) directory
 * Run next command to start calculator api locally 
     ```bash
-    uvicorn src.main:app --reload
+    uvicorn api.main:app --reload
     ```
 
 ## Checking endpoints
