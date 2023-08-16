@@ -38,9 +38,9 @@ class SalaryDataPipeline:
             Pipeline: A scikit-learn pipeline for data processing and modeling.
         """
         self.PIPELINE = Pipeline(
-            [
-                                ('dummy_vars', OneHotEncoder(variables=self.CATEGORICAL_VARS)),
-                                ('scaling', MinMaxScaler()),
+            [                   
+                                ('dummy_vars', OneHotEncoder(variables=self.CATEGORICAL_VARS)), 
+                                ('scaling', MinMaxScaler()),                   
                               ]
         )
         return self.PIPELINE

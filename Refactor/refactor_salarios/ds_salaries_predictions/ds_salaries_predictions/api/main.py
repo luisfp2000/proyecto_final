@@ -5,27 +5,14 @@ import pandas as pd
 from fastapi import FastAPI
 from predictor.predict import ModelPredictor
 from starlette.responses import JSONResponse
-from train.train_data import SalaryDataPipeline
 from .models.models import DSSalariesPrediction
 
 
+PATH_COLS = "C:/Users/luis.fernandez.COPPEL/LFPGit/proyectofinal/Refactor/refactor_salarios/ds_salaries_predictions/ds_salaries_predictions/models/train_data.csv"
+pd_struct_to_model = pd.read_csv(PATH_COLS)
 
-NUMERICAL_VARS = ['remote_ratio']
-CATEGORICAL_VARS = ['experience_level','employment_type','job_title' ,'employee_residence','company_location','company_size']
-NUMERICAL_VARS_WITH_NA = []
-SELECTED_FEATURES = []
-CATEGORICAL_VARS_WITH_NA = []
-NUMERICAL_NA_NOT_ALLOWED = [var for var in NUMERICAL_VARS if var not in NUMERICAL_VARS_WITH_NA]
-CATEGORICAL_NA_NOT_ALLOWED = [var for var in CATEGORICAL_VARS if var not in CATEGORICAL_VARS_WITH_NA]
-SEED_MODEL = 404
-
-salary_data_pipeline = SalaryDataPipeline (seed_model=SEED_MODEL,
-                                            numerical_vars=NUMERICAL_VARS, 
-                                            categorical_vars_with_na=CATEGORICAL_VARS_WITH_NA,
-                                            numerical_vars_with_na=NUMERICAL_VARS_WITH_NA,
-                                            categorical_vars=CATEGORICAL_VARS,
-                                            selected_features=SELECTED_FEATURES)
-
+# one-hot encoding columns
+column_names = pd_struct_to_model.columns.tolist()
 
 
 # Add the parent directory to sys.path
@@ -54,10 +41,59 @@ def extract_name(ds_salaries_features: DSSalariesPrediction):
          ds_salaries_features.company_location,
          ds_salaries_features.company_size,
          ds_salaries_features.remote_ratio]
-
-    #prediction = predictor.predict([X])
     
-    #Dummy Value for the  test
-    prediction = 123000
+    # Valores categóricos y numéricos del registro
+    categorical_values = {
+        'experience_level_'+ds_salaries_features.experience_level:      ds_salaries_features.experience_level,
+        'employment_type_'+ds_salaries_features.employment_type:        ds_salaries_features.employment_type,
+        'job_title_'+ds_salaries_features.job_title:                    ds_salaries_features.job_title,
+        'employee_residence_'+ds_salaries_features.employee_residence:  ds_salaries_features.employee_residence,
+        'company_location_'+ds_salaries_features.company_location:      ds_salaries_features.company_location,
+        'company_size_'+ds_salaries_features.company_size:              ds_salaries_features.company_size,
+        }
 
+    remote_ratio = ds_salaries_features.remote_ratio/100
+
+    # call to function for obtain the dataframe with flags
+    encoded_df = encode_categorical_values(remote_ratio, column_names, categorical_values)
+
+
+    row_series = encoded_df.iloc[0]
+    row_list = row_series.tolist()
+
+    prediction = predictor.predict([row_list])
+    
     return JSONResponse(f"Resultado predicción: {prediction} for data: {X}")
+
+
+    """
+    Encodes categorical values into a one-hot encoded DataFrame row.
+
+    Args:
+        remote_ratio_value (float): The remote ratio value for the row.
+        column_names (list): List of column names for the one-hot encoded DataFrame.
+        categorical_values (dict): Dictionary containing categorical column names as keys and corresponding values.
+
+    Returns:
+        pandas.DataFrame: A DataFrame with the encoded row.
+    """
+
+def encode_categorical_values(remote_ratio_value, column_names, categorical_values):
+    # Create a DF empty with the one-hot encoding
+    encoded_df = pd.DataFrame(columns=column_names)
+    
+    row = [0] * len(column_names)
+
+    row[0] = remote_ratio_value
+
+    for col_name, value in categorical_values.items():
+        if col_name in column_names:
+            index = column_names.index(col_name)
+            row[index] = 1
+    
+    encoded_df.loc[0] = row
+    
+    return encoded_df
+
+
+

@@ -160,7 +160,7 @@ class OneHotEncoder(BaseEstimator, TransformerMixin):
 
         X = pd.concat([X, X_encoded], axis=1)
         X.drop(self.variables, axis=1, inplace=True)
-
+        X.to_csv("C:/Users/luis.fernandez.COPPEL/LFPGit/proyectofinal/Refactor/refactor_salarios/ds_salaries_predictions/ds_salaries_predictions/models/train_data.csv", index=False)
         return X
 
 class ExtractLetters(BaseEstimator, TransformerMixin):
