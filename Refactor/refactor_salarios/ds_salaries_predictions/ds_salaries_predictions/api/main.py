@@ -23,7 +23,8 @@ async def healthcheck():
 
 @app.post('/predict')
 def extract_name(ds_salaries_features: DSSalariesPrediction):
-    predictor = ModelPredictor("Refactor\refactor_salarios\ds_salaries_predictions\ds_salaries_predictions\models\linear_regression_output.pkl")
+
+    predictor = ModelPredictor("C:/Users/luis.fernandez.COPPEL/LFPGit/proyectofinal/Refactor/refactor_salarios/ds_salaries_predictions/ds_salaries_predictions/models/linear_regression_output.pkl")
     X = [ds_salaries_features.company_location,
          ds_salaries_features.company_location,
          ds_salaries_features.employee_residence,
