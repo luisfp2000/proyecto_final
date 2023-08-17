@@ -94,14 +94,14 @@ In the command prompt, navigate to the location where you want to create your pr
 Create the Virtual Environment:
 To create a virtual environment named "myenv," execute the following command:
 
-python -m venv myenv
+python -m venv refactor_salarios
 
-This will create a "myenv" directory containing the virtual environment.
+This will create a "refactor_salarios" directory containing the virtual environment.
 
 Activate the Virtual Environment:
 To activate the virtual environment, navigate to the "myenv" folder you just created in the command prompt and then run:
 
-myenv\Scripts\activate
+refactor_salarios\Scripts\activate
 
 You'll notice that the command prompt changes, indicating that you're inside the virtual environment.
 
